@@ -1,0 +1,14 @@
+<div th:each="item : ${estoque}" class="card mx-2" style="width: 18rem;">
+    <div class="card-header">
+        <h5>Produto: </h5><span th:text="${item.produto}"></span>
+    </div>
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item">Quantidade: <span th:text="${item.quantidade}"></span></li>
+        <li class="list-group-item">Mínimo estoque: <span th:text="${item.min}"></span></li>
+        <li class="list-group-item">Máximo estoque: <span th:text="${item.max}"></span></li>
+        <li class="list-group-item">Custo Médio: <span th:text="${#numbers.formatCurrency(item.custoMedio)}"></span></li>
+    </ul>
+    <div class="card-footer">
+        <h6>Ultima compra: <span th:text="${#temporals.format(item.ultimaCompra, 'dd/MM/yyyy')}"></span></h6>
+    </div>
+</div>
