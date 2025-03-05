@@ -22,20 +22,90 @@
           crossorigin="anonymous" referrerpolicy="no-referrer"/>
     <!--CUSTOM-->
     <script src="/js/estoque.js" defer></script>
+    <link rel="stylesheet" href="/css/index.css">
     <title>Estoque</title>
 </head>
 <body>
-<div class="container">
-    <div class="input-group mb-3 mt-3">
-        <input id="data" type="date" class="form-control">
-        <button type="button" class="btn btn-outline-secondary" id="btnData">Button</button>
-    </div>
-    <div>
-        <h4>Estoque (<span id="dataTexto"></span>)</h4>
-    </div>
-    <hr>
-    <div id="estoque" class="d-flex mb-2 justify-content-evenly">
+<div class="mx-3 mt-3">
+    <div class="row">
+        <div class="col-2">
+            <ul class="nav flex-column sidebar">
+                <li class="nav-item">
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalCadastrarHotel">
+                        Cadastrar Hotel
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Link</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Link</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+                </li>
+            </ul>
+        </div>
+        <div class="col-10">
+            <div class="row mb-3 mt-3">
+                <div class="col-5">
+                    <label for="data">Data</label>
+                    <div class="input-group">
+                        <input id="data" type="date" class="form-control">
+                    </div>
+                </div>
+                <div class="col-5">
+                    <label for="selectHotel">Hotel</label>
+                    <div class="input-group ">
+                        <select id="selectHotel" class="form-select" aria-label="Default select example">
+                            <option selected></option>
+                            <option value="1">One</option>
+                            <option value="2">Two</option>
+                            <option value="3">Three</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-2">
+                    <label for="btnData"></label>
+                    <div class="input-group">
+                        <button type="button" class="btn btn-outline-secondary" id="btnData">Buscar</button>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <h4>Estoque (<span id="dataTexto"></span>)</h4>
+            </div>
+            <hr>
+            <div id="estoque" class="d-flex mb-2 justify-content-evenly">
 
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="modalCadastrarHotel" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Cadastrar novo hotel</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <label for="nomeHotel">Nome do Hotel</label>
+                <div class="input-group">
+                    <input id="nomeHotel" type="text" class="form-control">
+                </div>
+                <label for="urlApi">URL de acesso da API</label>
+                <div class="input-group">
+                    <input id="urlApi" type="text" class="form-control" placeholder="Ex.: http://10.135.20.13:8080/API/">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-primary" id="btnCadastrarHotel">Cadastrar</button>
+            </div>
+        </div>
     </div>
 </div>
 </body>

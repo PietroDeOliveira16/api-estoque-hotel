@@ -18,10 +18,10 @@ public class M_RespostaJson {
     @JsonProperty("max")
     private int max;
 
-    @JsonProperty("custo_Medio")
+    @JsonProperty("custo_medio")
     private BigDecimal custoMedio;
 
-    @JsonProperty("ultima_Compra")
+    @JsonProperty("ultima_compra")
     private LocalDate ultimaCompra;
 
     public String getProduto() {
