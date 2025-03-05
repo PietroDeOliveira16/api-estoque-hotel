@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.net.ConnectException;
 import java.util.List;
 
 @Controller
@@ -29,7 +30,12 @@ public class C_Estoque {
     public String getEstoque(@PathVariable("dataIso") String data,
                              @RequestParam("url") String url,
                              Model model){
-        model.addAttribute("estoque", s_estoque.acharEstoqueApi(data, url));
-        return "pv/itemsEstoque";
+        try {
+            List<M_Estoque> estoque = s_estoque.acharEstoqueApi(data, url);
+            model.addAttribute("estoque", estoque);
+            return "pv/itemsEstoque";
+        }catch (ConnectException connectException){
+            return "null";
+        }
     }
 }

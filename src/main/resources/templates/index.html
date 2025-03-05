@@ -31,7 +31,8 @@
         <div class="col-2">
             <ul class="nav flex-column sidebar">
                 <li class="nav-item">
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalCadastrarHotel">
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                            data-bs-target="#modalCadastrarHotel">
                         Cadastrar Hotel
                     </button>
                 </li>
@@ -59,7 +60,8 @@
                     <div class="input-group ">
                         <select id="selectHotel" class="form-select" aria-label="Default select example">
                             <option selected></option>
-                            <option th:each="hotel : ${hoteis}" th:value="${hotel.url}" th:text="${hotel.nome}"></option>
+                            <option th:each="hotel : ${hoteis}" th:value="${hotel.url}"
+                                    th:text="${hotel.nome}"></option>
                         </select>
                     </div>
                 </div>
@@ -74,15 +76,14 @@
                 <h4>Estoque (<span id="dataTexto"></span>)</h4>
             </div>
             <hr>
-            <div id="estoque" class="d-flex mb-2 flex-wrap">
-
-            </div>
+            <div id="estoque" class="d-flex mb-2 flex-wrap"></div>
         </div>
     </div>
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="modalCadastrarHotel" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal fade" id="modalCadastrarHotel" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+     aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -96,7 +97,8 @@
                 </div>
                 <label for="urlApi">URL de acesso da API</label>
                 <div class="input-group">
-                    <input id="urlApi" type="text" class="form-control" placeholder="Ex.: http://10.135.20.13:8080/API/">
+                    <input id="urlApi" type="text" class="form-control"
+                           placeholder="Ex.: http://10.135.20.13:8080/API/">
                 </div>
             </div>
             <div class="modal-footer">

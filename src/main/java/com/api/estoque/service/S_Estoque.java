@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.net.ConnectException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -21,16 +22,17 @@ public class S_Estoque {
     @Autowired
     private R_Hotel r_hotel;
 
-    public List<M_Estoque> acharEstoqueApi(String data, String url){
+    public List<M_Estoque> acharEstoqueApi(String data, String url) throws ConnectException {
         RestTemplate rt = new RestTemplate();
         List<M_Estoque> estoque = new ArrayList<>();
         ResponseEntity<List<M_RespostaJson>> response = rt.exchange(
                 url + data,
                 HttpMethod.GET,
                 null,
-                new ParameterizedTypeReference<List<M_RespostaJson>>() {}
+                new ParameterizedTypeReference<List<M_RespostaJson>>() {
+                }
         );
-        for (M_RespostaJson produtoJson : response.getBody()){
+        for (M_RespostaJson produtoJson : response.getBody()) {
             M_Estoque m_estoque = new M_Estoque();
             m_estoque.setProduto(produtoJson.getProduto());
             m_estoque.setQuantidade(produtoJson.getQuantidade());
@@ -44,11 +46,11 @@ public class S_Estoque {
         return estoque;
     }
 
-    public M_Hotel cadastrarHotel(String nome, String url){
+    public M_Hotel cadastrarHotel(String nome, String url) {
         M_Hotel m_hotel = new M_Hotel();
         boolean podeCadastrar = !nome.isBlank() && !url.isBlank();
 
-        if(podeCadastrar){
+        if (podeCadastrar) {
             m_hotel.setNome(nome);
             m_hotel.setUrl(url);
             return r_hotel.save(m_hotel);
@@ -57,7 +59,7 @@ public class S_Estoque {
         }
     }
 
-    public List<M_Hotel> acharHoteisCadastrados(){
+    public List<M_Hotel> acharHoteisCadastrados() {
         return r_hotel.findAll();
     }
 }
