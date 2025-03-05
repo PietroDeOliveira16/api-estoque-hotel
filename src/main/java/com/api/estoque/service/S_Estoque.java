@@ -1,7 +1,10 @@
 package com.api.estoque.service;
 
 import com.api.estoque.model.M_Estoque;
+import com.api.estoque.model.M_Hotel;
 import com.api.estoque.model.M_RespostaJson;
+import com.api.estoque.repository.R_Hotel;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -15,11 +18,14 @@ import java.util.List;
 
 @Service
 public class S_Estoque {
-    public List<M_Estoque> acharEstoqueApi(String data){
+    @Autowired
+    private R_Hotel r_hotel;
+
+    public List<M_Estoque> acharEstoqueApi(String data, String url){
         RestTemplate rt = new RestTemplate();
         List<M_Estoque> estoque = new ArrayList<>();
         ResponseEntity<List<M_RespostaJson>> response = rt.exchange(
-                "http://localhost:8080/API/" + data,
+                url + data,
                 HttpMethod.GET,
                 null,
                 new ParameterizedTypeReference<List<M_RespostaJson>>() {}
@@ -36,5 +42,22 @@ public class S_Estoque {
         }
 
         return estoque;
+    }
+
+    public M_Hotel cadastrarHotel(String nome, String url){
+        M_Hotel m_hotel = new M_Hotel();
+        boolean podeCadastrar = !nome.isBlank() && !url.isBlank();
+
+        if(podeCadastrar){
+            m_hotel.setNome(nome);
+            m_hotel.setUrl(url);
+            return r_hotel.save(m_hotel);
+        } else {
+            return null;
+        }
+    }
+
+    public List<M_Hotel> acharHoteisCadastrados(){
+        return r_hotel.findAll();
     }
 }

@@ -1,3 +1,7 @@
 .sidebar {
     border-right: 2px black solid;
 }
+
+.card {
+    min-width: 15vw;
+}

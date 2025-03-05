@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -59,9 +59,7 @@
                     <div class="input-group ">
                         <select id="selectHotel" class="form-select" aria-label="Default select example">
                             <option selected></option>
-                            <option value="1">One</option>
-                            <option value="2">Two</option>
-                            <option value="3">Three</option>
+                            <option th:each="hotel : ${hoteis}" th:value="${hotel.url}" th:text="${hotel.nome}"></option>
                         </select>
                     </div>
                 </div>
@@ -76,7 +74,7 @@
                 <h4>Estoque (<span id="dataTexto"></span>)</h4>
             </div>
             <hr>
-            <div id="estoque" class="d-flex mb-2 justify-content-evenly">
+            <div id="estoque" class="d-flex mb-2 flex-wrap">
 
             </div>
         </div>

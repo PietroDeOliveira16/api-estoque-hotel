@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
@@ -18,9 +19,17 @@ public class C_Estoque {
         this.s_estoque = s_estoque;
     }
 
+    @GetMapping("/")
+    public String getIndex(Model model){
+        model.addAttribute("hoteis", s_estoque.acharHoteisCadastrados());
+        return "index";
+    }
+
     @GetMapping("/{dataIso}")
-    public String getEstoque(@PathVariable("dataIso") String data, Model model){
-        model.addAttribute("estoque", s_estoque.acharEstoqueApi(data));
+    public String getEstoque(@PathVariable("dataIso") String data,
+                             @RequestParam("url") String url,
+                             Model model){
+        model.addAttribute("estoque", s_estoque.acharEstoqueApi(data, url));
         return "pv/itemsEstoque";
     }
 }
