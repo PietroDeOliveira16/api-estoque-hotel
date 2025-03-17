@@ -139,13 +139,51 @@ $('#selectFornecedor').on('change', function() {
     });
 });
 
-$('#selectProduto').on('change', function() {
-    var nomeProduto = $('#selectProduto').find(':selected').text();
-    console.log(nomeProduto);
-    var preco = $('#selectProduto').find(':selected').attr('data-preco');
-    console.log(preco);
-    var quantidade = $('#selectProduto').find(':selected').attr('data-quantidade');
-    console.log(quantidade);
+$(document).on('change', '#selectProduto', function() {
+    var selectedOption = $(this).find(':selected');
+    var nomeProduto = selectedOption.text();
 
-    $('#preco').text('1');
+    var preco = parseFloat(selectedOption.attr('data-preco'));
+
+    var formatadorMoeda = new Intl.NumberFormat('pt-BR', {
+            style: 'currency',
+            currency: 'BRL'
+        });
+
+    var precoFormatado = formatadorMoeda.format(preco);
+
+    var quantidade = selectedOption.attr('data-quantidade');
+
+    console.log(nomeProduto, preco, quantidade);
+
+    $('#preco').text(precoFormatado);
+    $('#fornecedor').text(quantidade + ' Unidades');
 });
+
+$(document).on('input', '#quantidade', function() {
+    var valor = parseFloat($(this).val()) || 0; // Converte para número ou assume 0
+    valor = valor < 0 ? 0 : valor; // Garante que não seja menor que 0
+    $(this).val(valor); // Atualiza o valor do input
+
+    var precoTotal = (converterParaFloat($('#preco').text()) * parseFloat($(this).val()));
+
+    var formatadorMoeda = new Intl.NumberFormat('pt-BR', {
+                style: 'currency',
+                currency: 'BRL'
+            });
+
+    var precoFormatado = formatadorMoeda.format(precoTotal);
+
+    $('#precoTotal').text(precoFormatado);
+});
+
+function converterParaFloat(moeda) {
+    // Remove caracteres não numéricos, exceto vírgulas e pontos
+    let valorLimpo = moeda.replace(/[^\d,.]/g, '');
+
+    // Remove pontos (separadores de milhar) e substitui vírgula por ponto
+    let valorNumerico = valorLimpo.replace(/\./g, '').replace(/,/g, '.');
+
+    // Converte para float
+    return parseFloat(valorNumerico);
+}
