@@ -1,3 +1,6 @@
+const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+
 $('#btnData').on('click', function () {
     var data = $('#data').val();
     console.log(data);
@@ -37,4 +40,83 @@ $('#btnData').on('click', function () {
                 }
             });
     }
+});
+
+$('#selectHotelEdit').on('change', function() {
+    $('#urlApiEdit').val($('#selectHotelEdit').find(":selected").attr("data-url"));
+    $('#nomeHotelEdit').val($('#selectHotelEdit').find(":selected").text());
+});
+
+$('#btnCadastrarHotel').on('click', function() {
+    var nome = $('#nomeHotel').val();
+    var url = $('#urlApi').val();
+
+    $.ajax({
+        url: '/cadastrarHotel',
+        method: 'POST',
+        data: {
+            nome: nome,
+            url: url
+        },
+        success: function(response){
+            if(response){
+                $('#modalCadastrarHotel').modal('hide');
+                Swal.fire({
+                  position: "top-end",
+                  icon: "success",
+                  title: "Hotel cadastrado com sucesso!",
+                  showConfirmButton: false,
+                  timer: 3000
+                });
+                $('#divSelect').load(location.href + " #divSelect");
+            } else {
+                Swal.fire({
+                    position: "top-end",
+                    icon: "error",
+                    title: "Erro ao cadastrar hotel :(",
+                    showConfirmButton: false,
+                    timer: 3000
+                });
+            }
+        },
+        error: function(){}
+    });
+});
+
+$('#btnEditarHotel').on('click', function() {
+    var nome = $('#nomeHotelEdit').val();
+    var id = $('#selectHotelEdit').find(":selected").val();
+    var url = $('#urlApiEdit').val();
+
+    $.ajax({
+        url: '/editarHotel',
+        method: 'POST',
+        data: {
+           newNome: nome,
+           newUrl: url,
+           id: id
+        },
+        success: function(response){
+            if(response){
+                $('#modalEditarHotel').modal('hide');
+                Swal.fire({
+                    position: "top-end",
+                    icon: "success",
+                    title: "Hotel editado com sucesso!",
+                    showConfirmButton: false,
+                    timer: 3000
+                });
+                $('#divSelect').load(location.href + " #divSelect");
+            } else {
+                Swal.fire({
+                    position: "top-end",
+                    icon: "error",
+                    title: "Erro ao editar hotel :(",
+                    showConfirmButton: false,
+                    timer: 3000
+                });
+            }
+        },
+        error: function(){}
+    });
 });

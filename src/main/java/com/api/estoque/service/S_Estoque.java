@@ -45,21 +45,4 @@ public class S_Estoque {
 
         return estoque;
     }
-
-    public M_Hotel cadastrarHotel(String nome, String url) {
-        M_Hotel m_hotel = new M_Hotel();
-        boolean podeCadastrar = !nome.isBlank() && !url.isBlank();
-
-        if (podeCadastrar) {
-            m_hotel.setNome(nome);
-            m_hotel.setUrl(url);
-            return r_hotel.save(m_hotel);
-        } else {
-            return null;
-        }
-    }
-
-    public List<M_Hotel> acharHoteisCadastrados() {
-        return r_hotel.findAll();
-    }
 }

@@ -11,6 +11,10 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
             crossorigin="anonymous"></script>
+    <!--POPPER-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.2/umd/popper.min.js"
+            integrity="sha512-2rNj2KJ+D8s1ceNasTIex6z4HWyOnEYLVC3FigGOmyQCZc2eBXKgOxQmo3oKLHyfcj53uz4QMsRCWNbLd32Q1g=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <!--SWEET ALERT-->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!--JQUERY-->
@@ -30,20 +34,26 @@
     <div class="row">
         <div class="col-2">
             <ul class="nav flex-column sidebar">
-                <li class="nav-item">
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                <li class="nav-item mb-2">
+                    <button type="button" class="btn btn-success" data-bs-toggle="modal"
                             data-bs-target="#modalCadastrarHotel">
                         Cadastrar Hotel
                     </button>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Link</a>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                            data-bs-target="#modalEditarHotel">
+                        Editar Hotel
+                    </button>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Link</a>
+                <li class="nav-item ms-1 me-2">
+                    <hr>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+                <li class="nav-item mb-2">
+                    <button type="button" class="btn btn-warning" data-bs-toggle="modal"
+                            data-bs-target="#modalComprarProdutos">
+                        Comprar Produtos
+                    </button>
                 </li>
             </ul>
         </div>
@@ -57,7 +67,7 @@
                 </div>
                 <div class="col-5">
                     <label for="selectHotel">Hotel</label>
-                    <div class="input-group ">
+                    <div id="divSelect" class="input-group ">
                         <select id="selectHotel" class="form-select" aria-label="Default select example">
                             <option selected></option>
                             <option th:each="hotel : ${hoteis}" th:value="${hotel.url}"
@@ -81,18 +91,18 @@
     </div>
 </div>
 
-<!-- Modal -->
+<!-- Modal Cadastrar -->
 <div class="modal fade" id="modalCadastrarHotel" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
      aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="staticBackdropLabel">Cadastrar novo hotel</h1>
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Editar hotel</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <label for="nomeHotel">Nome do Hotel</label>
-                <div class="input-group">
+                <div class="input-group mb-2">
                     <input id="nomeHotel" type="text" class="form-control">
                 </div>
                 <label for="urlApi">URL de acesso da API</label>
@@ -108,5 +118,161 @@
         </div>
     </div>
 </div>
+
+<!-- Modal Editar -->
+<div class="modal fade" id="modalEditarHotel" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+     aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel2">Editar hotel</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <label for="selectHotel">Selecione o Hotel</label>
+                <div class="input-group mb-2">
+                    <select id="selectHotelEdit" class="form-select" aria-label="Default select example">
+                        <option selected></option>
+                        <option th:each="hotel : ${hoteis}" th:value="${hotel.id}"
+                                th:text="${hotel.nome}" th:attr="data-url=${hotel.url}">
+                        </option>
+                    </select>
+                </div>
+                <hr>
+                <label for="nomeHotelEdit">Editar o nome do Hotel</label>
+                <div class="input-group mb-2">
+                    <input id="nomeHotelEdit" type="text" class="form-control">
+                </div>
+                <label for="urlApi">Editar URL de acesso da API</label>
+                <div class="input-group">
+                    <input id="urlApiEdit" type="text" class="form-control"
+                           placeholder="">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-primary" id="btnEditarHotel">Editar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Compras -->
+<div class="modal fade modal-xl" id="modalComprarProdutos" data-bs-backdrop="static" data-bs-keyboard="false"
+     tabindex="-1"
+     aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel3">Compra de produtos</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-6">
+                        <label for="selectFornecedor">Selecionar Fornecedor</label>
+                        <div class="input-group mb-2">
+                            <select id="selectFornecedor" class="form-select" aria-label="Default select example">
+                                <option selected></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <label for="selectProduto">Selecionar Produto</label>
+                        <div class="input-group mb-2">
+                            <select id="selectProduto" class="form-select" aria-label="Default select example">
+                                <option selected></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-6">
+                        <h5 class="tw-bold">Revisão do produto</h5>
+                        <div class="row">
+                            <div class="col-6">
+                                <label for="preco">Preço Uni.</label>
+                                <p id="preco">R$10,00</p>
+                            </div>
+                            <div class="col-6">
+                                <label for="fornecedor">Estoque do fornecedor</label>
+                                <p id="fornecedor">10.000 <span> Unidades</span></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <h5 class="tw-bold">Detalhes da compra</h5>
+                        <div class="row">
+                            <div class="col-6">
+                                <label for="quantidade">Quantidade para comprar</label>
+                                <div class="input-group mb-2">
+                                    <input id="quantidade" type="number" class="form-control" aria-label="Username"
+                                           aria-describedby="basic-addon1">
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <label for="precoTotal">Preço Final</label>
+                                <p id="precoTotal">R$XX,XX</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-success" id="btnAvancarCompra" data-bs-target="#modalFinalizarCompra" data-bs-toggle="modal">Avançar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Finalizar Compras -->
+<div class="modal fade modal-xl" id="modalFinalizarCompra" data-bs-backdrop="static" data-bs-keyboard="false"
+     tabindex="-1"
+     aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel4">Compra de produtos</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h5>Distribuição para filiais</h5>
+                <div class="row">
+                    <div class="col-3">
+                        <label for="selectHoteis">Filiais</label>
+                        <select id="selectHoteis" class="form-select" aria-label="Default select example">
+                            <option selected>Open this select menu</option>
+                            <option value="1">One</option>
+                            <option value="2">Two</option>
+                            <option value="3">Three</option>
+                        </select>
+                    </div>
+                    <div class="col-3">
+                        <button id="btnAddFilial" type="button" class="btn btn-success mt-4"
+                                data-bs-toggle="tooltip" data-bs-placement="top"
+                                data-bs-title="Adicionar filial a lista.">
+                            <i class="fa-solid fa-plus"></i>
+                        </button>
+                    </div>
+                    <div class="col-4">
+                        <label for="qtdTotal" class="fs-5 fw-bold">Quantidade de unidades totais compradas:</label>
+                        <p id="qtdTotal" class="fs-4 fw-bold">1.000</p>
+                    </div>
+                </div>
+                <hr>
+                <div id="divFiliais">
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-target="#modalComprarProdutos" data-bs-toggle="modal">Voltar</button>
+                <button type="button" class="btn btn-success" id="btnFinalizarCompra">Avançar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 </body>
 </html>

@@ -2,6 +2,7 @@ package com.api.estoque.controller;
 
 import com.api.estoque.model.M_Estoque;
 import com.api.estoque.service.S_Estoque;
+import com.api.estoque.service.S_Hotel;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,14 +16,16 @@ import java.util.List;
 @Controller
 public class C_Estoque {
     private final S_Estoque s_estoque;
+    private final S_Hotel s_hotel;
 
-    public C_Estoque(S_Estoque s_estoque) {
+    public C_Estoque(S_Estoque s_estoque, S_Hotel s_hotel) {
         this.s_estoque = s_estoque;
+        this.s_hotel = s_hotel;
     }
 
     @GetMapping("/")
     public String getIndex(Model model){
-        model.addAttribute("hoteis", s_estoque.acharHoteisCadastrados());
+        model.addAttribute("hoteis", s_hotel.acharHoteisCadastrados());
         return "index";
     }
 
