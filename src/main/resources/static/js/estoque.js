@@ -120,3 +120,32 @@ $('#btnEditarHotel').on('click', function() {
         error: function(){}
     });
 });
+
+$('#selectFornecedor').on('change', function() {
+    var idFornecedor = $('#selectFornecedor').find(':selected').val();
+
+    $.ajax({
+        url: '/acharProdutosDoFornecedor',
+        method: 'POST',
+        data: {
+            id: idFornecedor
+        },
+        success: function(response){
+            if(response){
+                $('#divSelecaoProdutos').empty().append(response);
+            }
+        },
+        error: function(){}
+    });
+});
+
+$('#selectProduto').on('change', function() {
+    var nomeProduto = $('#selectProduto').find(':selected').text();
+    console.log(nomeProduto);
+    var preco = $('#selectProduto').find(':selected').attr('data-preco');
+    console.log(preco);
+    var quantidade = $('#selectProduto').find(':selected').attr('data-quantidade');
+    console.log(quantidade);
+
+    $('#preco').text('1');
+});

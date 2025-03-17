@@ -174,16 +174,12 @@
                         <div class="input-group mb-2">
                             <select id="selectFornecedor" class="form-select" aria-label="Default select example">
                                 <option selected></option>
+                                <option th:each="fornecedor : ${fornecedores}" th:text="${fornecedor.nome}" th:value="${fornecedor.id}"></option>
                             </select>
                         </div>
                     </div>
-                    <div class="col-6">
-                        <label for="selectProduto">Selecionar Produto</label>
-                        <div class="input-group mb-2">
-                            <select id="selectProduto" class="form-select" aria-label="Default select example">
-                                <option selected></option>
-                            </select>
-                        </div>
+                    <div class="col-6" id="divSelecaoProdutos">
+
                     </div>
                 </div>
                 <hr>
@@ -193,7 +189,7 @@
                         <div class="row">
                             <div class="col-6">
                                 <label for="preco">Preço Uni.</label>
-                                <p id="preco">R$10,00</p>
+                                <p id="preco"></p>
                             </div>
                             <div class="col-6">
                                 <label for="fornecedor">Estoque do fornecedor</label>
