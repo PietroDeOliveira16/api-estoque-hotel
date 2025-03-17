@@ -1,5 +1,15 @@
 const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
 const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+var formatadorMoeda = new Intl.NumberFormat('pt-BR', {
+            style: 'currency',
+            currency: 'BRL'
+});
+
+var nomeProduto = '';
+var precoFormatado = formatadorMoeda.format(0.00);
+var precoTotalFormatado = formatadorMoeda.format(0.00);
+var estoqueFornecedor = 0;
+var quantidadeComprar = 0;
 
 $('#btnData').on('click', function () {
     var data = $('#data').val();
@@ -122,42 +132,50 @@ $('#btnEditarHotel').on('click', function() {
 });
 
 $('#selectFornecedor').on('change', function() {
-    var idFornecedor = $('#selectFornecedor').find(':selected').val();
+    var selectedOption = $('#selectFornecedor').find(':selected');
 
-    $.ajax({
-        url: '/acharProdutosDoFornecedor',
-        method: 'POST',
-        data: {
-            id: idFornecedor
-        },
-        success: function(response){
-            if(response){
-                $('#divSelecaoProdutos').empty().append(response);
-            }
-        },
-        error: function(){}
-    });
+    if(selectedOption.val() === 0){
+        nomeProduto = '';
+        precoFormatado = formatadorMoeda.format(0.00);
+        precoTotalFormatado = formatadorMoeda.format(0.00);
+        estoqueFornecedor = 0;
+        quantidadeComprar = 0;
+        console.log('limpar opcoes');
+    } else {
+        var idFornecedor = selectedOption.val();
+
+            $.ajax({
+                url: '/acharProdutosDoFornecedor',
+                method: 'POST',
+                data: {
+                    id: idFornecedor
+                },
+                success: function(response){
+                    if(response){
+                        $('#divSelecaoProdutos').empty().append(response);
+                    }
+                },
+                error: function(){}
+            });
+    }
 });
 
 $(document).on('change', '#selectProduto', function() {
     var selectedOption = $(this).find(':selected');
-    var nomeProduto = selectedOption.text();
+
+    nomeProduto = selectedOption.text();
+    $('#produto').text(nomeProduto);
 
     var preco = parseFloat(selectedOption.attr('data-preco'));
 
-    var formatadorMoeda = new Intl.NumberFormat('pt-BR', {
-            style: 'currency',
-            currency: 'BRL'
-        });
+    precoFormatado = formatadorMoeda.format(preco);
 
-    var precoFormatado = formatadorMoeda.format(preco);
+    estoqueFornecedor = selectedOption.attr('data-quantidade');
 
-    var quantidade = selectedOption.attr('data-quantidade');
-
-    console.log(nomeProduto, preco, quantidade);
+    console.log(nomeProduto, preco, estoqueFornecedor);
 
     $('#preco').text(precoFormatado);
-    $('#fornecedor').text(quantidade + ' Unidades');
+    $('#estoqueFornecedor').text(estoqueFornecedor + ' Unidades');
 });
 
 $(document).on('input', '#quantidade', function() {
@@ -167,12 +185,7 @@ $(document).on('input', '#quantidade', function() {
 
     var precoTotal = (converterParaFloat($('#preco').text()) * parseFloat($(this).val()));
 
-    var formatadorMoeda = new Intl.NumberFormat('pt-BR', {
-                style: 'currency',
-                currency: 'BRL'
-            });
-
-    var precoFormatado = formatadorMoeda.format(precoTotal);
+    precoTotalFormatado = formatadorMoeda.format(precoTotal);
 
     $('#precoTotal').text(precoFormatado);
 });
@@ -187,3 +200,9 @@ function converterParaFloat(moeda) {
     // Converte para float
     return parseFloat(valorNumerico);
 }
+
+$('#btnAvancarCompra').on('click',  function() {
+    quantidadeComprar = $('#quantidade').val();
+
+    $('#qtdTotal').text(quantidadeComprar);
+});

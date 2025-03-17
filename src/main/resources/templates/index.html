@@ -69,7 +69,7 @@
                     <label for="selectHotel">Hotel</label>
                     <div id="divSelect" class="input-group ">
                         <select id="selectHotel" class="form-select" aria-label="Default select example">
-                            <option selected></option>
+                            <option selected value="0"></option>
                             <option th:each="hotel : ${hoteis}" th:value="${hotel.url}"
                                     th:text="${hotel.nome}"></option>
                         </select>
@@ -132,7 +132,7 @@
                 <label for="selectHotel">Selecione o Hotel</label>
                 <div class="input-group mb-2">
                     <select id="selectHotelEdit" class="form-select" aria-label="Default select example">
-                        <option selected></option>
+                        <option selected value="0"></option>
                         <option th:each="hotel : ${hoteis}" th:value="${hotel.id}"
                                 th:text="${hotel.nome}" th:attr="data-url=${hotel.url}">
                         </option>
@@ -173,7 +173,7 @@
                         <label for="selectFornecedor">Selecionar Fornecedor</label>
                         <div class="input-group mb-2">
                             <select id="selectFornecedor" class="form-select" aria-label="Default select example">
-                                <option selected></option>
+                                <option selected value="0"></option>
                                 <option th:each="fornecedor : ${fornecedores}" th:text="${fornecedor.nome}" th:value="${fornecedor.id}"></option>
                             </select>
                         </div>
@@ -192,8 +192,8 @@
                                 <p id="preco"></p>
                             </div>
                             <div class="col-6">
-                                <label for="fornecedor">Estoque do fornecedor</label>
-                                <p id="fornecedor"></p>
+                                <label for="estoqueFornecedor">Estoque do fornecedor</label>
+                                <p id="estoqueFornecedor"></p>
                             </div>
                         </div>
                     </div>
@@ -204,7 +204,7 @@
                                 <label for="quantidade">Quantidade para comprar</label>
                                 <div class="input-group mb-2">
                                     <input id="quantidade" type="number" class="form-control" aria-label="Username"
-                                           aria-describedby="basic-addon1">
+                                           aria-describedby="basic-addon1" min="0">
                                 </div>
                             </div>
                             <div class="col-6">
@@ -239,22 +239,26 @@
                     <div class="col-3">
                         <label for="selectHoteis">Filiais</label>
                         <select id="selectHoteis" class="form-select" aria-label="Default select example">
-                            <option selected>Open this select menu</option>
-                            <option value="1">One</option>
-                            <option value="2">Two</option>
-                            <option value="3">Three</option>
+                            <option selected value="0"></option>
+                            <option th:each="hotel : ${hoteis}" th:value="${hotel.id}"
+                                    th:text="${hotel.nome}" th:attr="data-url=${hotel.url}">
+                            </option>
                         </select>
                     </div>
-                    <div class="col-3">
+                    <div class="col-2">
                         <button id="btnAddFilial" type="button" class="btn btn-success mt-4"
                                 data-bs-toggle="tooltip" data-bs-placement="top"
                                 data-bs-title="Adicionar filial a lista.">
                             <i class="fa-solid fa-plus"></i>
                         </button>
                     </div>
-                    <div class="col-4">
-                        <label for="qtdTotal" class="fs-5 fw-bold">Quantidade de unidades totais compradas:</label>
-                        <p id="qtdTotal" class="fs-4 fw-bold">1.000</p>
+                    <div class="col-5">
+                        <label for="qtdTotal" class="fs-6 fw-bold">Quantidade de unidades totais compradas:</label>
+                        <p id="qtdTotal" class="fs-6 fw-bold"></p>
+                    </div>
+                    <div class="col-2">
+                        <label for="produto" class="fs-6 fw-bold">Produto:</label>
+                        <p id="produto" class="fs-6 fw-bold"></p>
                     </div>
                 </div>
                 <hr>
