@@ -1,8 +1,17 @@
 const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
 const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+
 var formatadorMoeda = new Intl.NumberFormat('pt-BR', {
             style: 'currency',
             currency: 'BRL'
+});
+
+const swalWithBootstrapButtons = Swal.mixin({
+                  customClass: {
+                    confirmButton: "btn btn-success mx-1",
+                    cancelButton: "btn btn-danger mx-1"
+                  },
+                  buttonsStyling: false
 });
 
 var nomeProduto = '';
@@ -10,6 +19,8 @@ var precoFormatado = formatadorMoeda.format(0.00);
 var precoTotalFormatado = formatadorMoeda.format(0.00);
 var estoqueFornecedor = 0;
 var quantidadeComprar = 0;
+var preco = 0.0;
+var precoTotal = 0.0;
 
 $('#btnData').on('click', function () {
     var data = $('#data').val();
@@ -134,30 +145,21 @@ $('#btnEditarHotel').on('click', function() {
 $('#selectFornecedor').on('change', function() {
     var selectedOption = $('#selectFornecedor').find(':selected');
 
-    if(selectedOption.val() === 0){
-        nomeProduto = '';
-        precoFormatado = formatadorMoeda.format(0.00);
-        precoTotalFormatado = formatadorMoeda.format(0.00);
-        estoqueFornecedor = 0;
-        quantidadeComprar = 0;
-        console.log('limpar opcoes');
-    } else {
-        var idFornecedor = selectedOption.val();
+    var idFornecedor = selectedOption.val();
 
-            $.ajax({
-                url: '/acharProdutosDoFornecedor',
-                method: 'POST',
-                data: {
-                    id: idFornecedor
-                },
-                success: function(response){
-                    if(response){
-                        $('#divSelecaoProdutos').empty().append(response);
-                    }
-                },
-                error: function(){}
-            });
-    }
+    $.ajax({
+        url: '/acharProdutosDoFornecedor',
+        method: 'POST',
+        data: {
+            id: idFornecedor
+        },
+        success: function(response){
+            if(response){
+                $('#divSelecaoProdutos').empty().append(response);
+            }
+        },
+        error: function(){}
+    });
 });
 
 $(document).on('change', '#selectProduto', function() {
@@ -166,7 +168,7 @@ $(document).on('change', '#selectProduto', function() {
     nomeProduto = selectedOption.text();
     $('#produto').text(nomeProduto);
 
-    var preco = parseFloat(selectedOption.attr('data-preco'));
+    preco = parseFloat(selectedOption.attr('data-preco'));
 
     precoFormatado = formatadorMoeda.format(preco);
 
@@ -183,26 +185,159 @@ $(document).on('input', '#quantidade', function() {
     valor = valor < 0 ? 0 : valor; // Garante que não seja menor que 0
     $(this).val(valor); // Atualiza o valor do input
 
-    var precoTotal = (converterParaFloat($('#preco').text()) * parseFloat($(this).val()));
+    precoTotal = (preco * parseFloat($(this).val()));
 
     precoTotalFormatado = formatadorMoeda.format(precoTotal);
 
-    $('#precoTotal').text(precoFormatado);
+    $('#precoTotal').text(precoTotalFormatado);
 });
-
-function converterParaFloat(moeda) {
-    // Remove caracteres não numéricos, exceto vírgulas e pontos
-    let valorLimpo = moeda.replace(/[^\d,.]/g, '');
-
-    // Remove pontos (separadores de milhar) e substitui vírgula por ponto
-    let valorNumerico = valorLimpo.replace(/\./g, '').replace(/,/g, '.');
-
-    // Converte para float
-    return parseFloat(valorNumerico);
-}
 
 $('#btnAvancarCompra').on('click',  function() {
-    quantidadeComprar = $('#quantidade').val();
+    var fornecedorId = +$('#selectFornecedor').find(':selected').val();
+    var produtoId = +$('#selectProduto').find(':selected').val();
+    quantidadeComprar = +$('#quantidade').val();
 
-    $('#qtdTotal').text(quantidadeComprar);
+    if(fornecedorId <= 0 || produtoId <= 0){
+        Swal.fire({
+            icon: "error",
+            title: "Selecione um fornecedor ou produto válido.",
+            showCloseButton: true,
+            showConfirmButton: false
+        });
+    } else {
+        if(quantidadeComprar < 1 || quantidadeComprar == null){
+                quantidadeComprar = 1;
+        }
+
+        $('#qtdTotal').text(quantidadeComprar);
+        $('#quantidade').val(quantidadeComprar);
+        $('#modalComprarProdutos').modal('hide');
+        $('#modalFinalizarCompra').modal('show');
+    }
 });
+
+$(document).on('click', '#btnAddFilial', function() {
+    var filialEscolhida = $('#selectHoteis').find(':selected').val();
+    if(filialEscolhida == 0){
+        Swal.fire({
+            position: "top-end",
+            icon: "error",
+            title: "Escolha uma ou mais filiais para distribuir a compra",
+            showConfirmButton: false,
+            timer: 3500
+        });
+    } else {
+        $.ajax({
+                url: '/addFilial',
+                method: 'POST',
+                data:{
+                    id: filialEscolhida
+                },
+                success: function(response){
+                    $('#divFiliais').append(response);
+                },
+                error: function(){}
+            });
+    }
+});
+
+$(document).on('click', '.btnRemoverFilial', function(){
+    $(this).closest('.row').remove(); // Remove a linha (filial) inteira
+});
+
+$(document).ready(function() {
+    $(document).on('input', '.inputQuantidadeAlocada', function() {
+        var valor = +$(this).val();
+
+        if(quantidadeComprar - valor < 0){
+            $(this).val(quantidadeComprar);
+        }
+    });
+
+    $(document).on('change', '.inputQuantidadeAlocada', function() {
+        var qtdAlocada = +$(this).val();
+
+        if(quantidadeComprar - qtdAlocada < 0){
+            $(this).val(quantidadeComprar);
+        }
+    });
+
+    $(document).on('click', '#btnFinalizarCompra', function() {
+        var div = $('#divFiliais');
+        if(div.length){
+            if(div.html().trim() !== '') {
+                var inputVal = 0;
+                var total = 0;
+                $('.filial').each(function(){
+                    inputVal = +$(this).find('.inputQuantidadeAlocada').val();
+                    total += inputVal;
+                });
+                if(quantidadeComprar - total < 0){
+                    Swal.fire({
+                                icon: "error",
+                                title: "Certifique-se de que a quantidade alocada para cada filial está dentro da quantidade da compra!",
+                                showCloseButton: true,
+                                showConfirmButton: false
+                            });
+                } else if (total == 0) {
+                    swalWithBootstrapButtons.fire({
+                                      title: "Cuidado!",
+                                      text: "Nenhum valor foi atribuido às filiais escolhidas, a compra sera destinada ao estoque, tem certeza?",
+                                      icon: "warning",
+                                      showCancelButton: true,
+                                      confirmButtonText: "Sim, finalizar compra.",
+                                      cancelButtonText: "Não, voltar para a compra.",
+                                      reverseButtons: true
+                                    }).then((result) => {
+                                      if (result.isConfirmed) {
+                                        $('#modalFinalizarCompra').modal('hide');
+                                        Swal.fire({
+                                            icon: "success",
+                                            title: "Compra realizada com sucesso!",
+                                            showConfirmButton: false,
+                                            timer: 3000
+                                        });
+                                      } else if (
+                                        /* Read more about handling dismissals below */
+                                        result.dismiss === Swal.DismissReason.cancel
+                                      ) {
+
+                                      }
+                                    });
+                } else {
+                    $('#modalFinalizarCompra').modal('hide');
+                    Swal.fire({
+                                            icon: "success",
+                                            title: "Compra realizada com sucesso!",
+                                            showConfirmButton: false,
+                                            timer: 3000
+                                        });
+                }
+            } else {
+                swalWithBootstrapButtons.fire({
+                  title: "Cuidado!",
+                  text: "Nenhuma filial foi selecionada, toda a compra sera destinada ao estoque, tem certeza?",
+                  icon: "warning",
+                  showCancelButton: true,
+                  confirmButtonText: "Sim, finalizar compra.",
+                  cancelButtonText: "Não, voltar para a compra.",
+                  reverseButtons: true
+                }).then((result) => {
+                  if (result.isConfirmed) {
+                    $('#modalFinalizarCompra').modal('hide');
+                    Swal.fire({
+                        icon: "success",
+                        title: "Compra realizada com sucesso!",
+                        showConfirmButton: false,
+                        timer: 3000
+                    });
+                  } else if (
+                    /* Read more about handling dismissals below */
+                    result.dismiss === Swal.DismissReason.cancel
+                  ) {}
+                });
+            }
+        }
+    });
+});
+

@@ -41,7 +41,11 @@ public class S_Hotel {
         }
     }
 
-    public List<M_Hotel> acharHoteisCadastrados() {
+    public List<M_Hotel> getHoteisCadastrados() {
         return r_hotel.findAll(Sort.by(Sort.Order.by("id")));
+    }
+
+    public M_Hotel getHotel(Long id){
+        return r_hotel.getReferenceById(id);
     }
 }

@@ -25,7 +25,7 @@ public class C_Estoque {
 
     @GetMapping("/")
     public String getIndex(Model model){
-        model.addAttribute("hoteis", s_hotel.acharHoteisCadastrados());
+        model.addAttribute("hoteis", s_hotel.getHoteisCadastrados());
         model.addAttribute("fornecedores", s_fornecedor.acharFornecedores());
         return "index";
     }

@@ -217,7 +217,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-                <button type="button" class="btn btn-success" id="btnAvancarCompra" data-bs-target="#modalFinalizarCompra" data-bs-toggle="modal">Avançar</button>
+                <button type="button" class="btn btn-success" id="btnAvancarCompra">Avançar</button>
             </div>
         </div>
     </div>
@@ -236,7 +236,7 @@
             <div class="modal-body">
                 <h5>Distribuição para filiais</h5>
                 <div class="row">
-                    <div class="col-3">
+                    <div class="col-2">
                         <label for="selectHoteis">Filiais</label>
                         <select id="selectHoteis" class="form-select" aria-label="Default select example">
                             <option selected value="0"></option>
@@ -245,19 +245,19 @@
                             </option>
                         </select>
                     </div>
-                    <div class="col-2">
+                    <div class="col-1">
                         <button id="btnAddFilial" type="button" class="btn btn-success mt-4"
                                 data-bs-toggle="tooltip" data-bs-placement="top"
-                                data-bs-title="Adicionar filial a lista.">
+                                data-bs-title="Adicionar filial a lista">
                             <i class="fa-solid fa-plus"></i>
                         </button>
                     </div>
-                    <div class="col-5">
-                        <label for="qtdTotal" class="fs-6 fw-bold">Quantidade de unidades totais compradas:</label>
+                    <div class="col-2">
+                        <label for="qtdTotal" class="fs-6 fw-bold mt-3">Unidades compradas:</label>
                         <p id="qtdTotal" class="fs-6 fw-bold"></p>
                     </div>
-                    <div class="col-2">
-                        <label for="produto" class="fs-6 fw-bold">Produto:</label>
+                    <div class="col-4">
+                        <label for="produto" class="fs-6 fw-bold mt-3">Produto:</label>
                         <p id="produto" class="fs-6 fw-bold"></p>
                     </div>
                 </div>
@@ -268,7 +268,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-target="#modalComprarProdutos" data-bs-toggle="modal">Voltar</button>
-                <button type="button" class="btn btn-success" id="btnFinalizarCompra">Avançar</button>
+                <button type="button" class="btn btn-success" id="btnFinalizarCompra">Finalizar</button>
             </div>
         </div>
     </div>
