@@ -1,6 +1,6 @@
 <div class="row filial" th:fragment="linhaFilial">
     <div class="col-12">
-        <h6>Filial: <span id="nomeFilial" th:text="${hotel.nome}"></span></h6>
+        <h6>Filial: <span class="nomeFilial" th:text="${hotel.nome}" th:attr="data-id=${hotel.id}"></span></h6>
     </div>
     <div class="col-5">
         <div class="mb-3">

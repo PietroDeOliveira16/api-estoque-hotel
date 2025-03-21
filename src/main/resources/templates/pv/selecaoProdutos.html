@@ -3,6 +3,6 @@
     <select id="selectProduto" class="form-select" aria-label="Default select example">
         <option selected value="0"></option>
         <option th:each="fp : ${fornecedorProduto}" th:text="${fp.produto.nome}" th:value="${fp.produto.id}"
-                th:attr="data-preco=${fp.produto.preco}, data-quantidade=${fp.quantidadeEstoque}"></option>
+                th:attr="data-preco=${fp.produto.preco}, data-quantidade=${fp.quantidadeEstoque}, data-cod=${fp.produto.codBarras}"></option>
     </select>
 </div>

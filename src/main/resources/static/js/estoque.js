@@ -21,6 +21,8 @@ var estoqueFornecedor = 0;
 var quantidadeComprar = 0;
 var preco = 0.0;
 var precoTotal = 0.0;
+var produtoId = 0;
+var produtoCodBarras = 0;
 
 $('#btnData').on('click', function () {
     var data = $('#data').val();
@@ -194,7 +196,9 @@ $(document).on('input', '#quantidade', function() {
 
 $('#btnAvancarCompra').on('click',  function() {
     var fornecedorId = +$('#selectFornecedor').find(':selected').val();
-    var produtoId = +$('#selectProduto').find(':selected').val();
+    produtoId = +$('#selectProduto').find(':selected').val();
+    produtoCodBarras = $('#selectProduto').find(':selected').attr('data-cod');
+    console.log('Cod barras: ' + produtoCodBarras);
     quantidadeComprar = +$('#quantidade').val();
 
     if(fornecedorId <= 0 || produtoId <= 0){
@@ -305,13 +309,47 @@ $(document).ready(function() {
                                       }
                                     });
                 } else {
-                    $('#modalFinalizarCompra').modal('hide');
-                    Swal.fire({
-                                            icon: "success",
-                                            title: "Compra realizada com sucesso!",
-                                            showConfirmButton: false,
-                                            timer: 3000
-                                        });
+                    var idsFiliais = [];
+                    var idFilial = 0;
+                    var quantidadesFiliais = [];
+                    var quantidadeFilial = 0;
+                    $('.filial').each(function(){
+                        idFilial = +$(this).find('.nomeFilial').attr('data-id');
+                        idsFiliais.push(idFilial);
+                        quantidadeFilial = +$(this).find('.inputQuantidadeAlocada').val();
+                        quantidadesFiliais.push(quantidadeFilial);
+                    });
+                    $.ajax({
+                        url: '/salvarCompras',
+                        method: 'POST',
+                        data: {
+                            ids: idsFiliais,
+                            quantidadeComprada: quantidadesFiliais,
+                            produto: nomeProduto,
+                            codBarras: produtoCodBarras
+                        },
+                        success: function(response){
+                            if(response){
+                                $('#modalFinalizarCompra').modal('hide');
+                                Swal.fire({
+                                    icon: "success",
+                                    title: "Compra realizada com sucesso!",
+                                    showConfirmButton: false,
+                                    timer: 3000
+                                });
+                            } else {
+                                Swal.fire({
+                                                                    icon: "error",
+                                                                    title: "Erro ao realizar a compra!",
+                                                                    showConfirmButton: false,
+                                                                    timer: 3000
+                                                                });
+                            }
+                        },
+                        error: function() {
+
+                        }
+                    });
                 }
             } else {
                 swalWithBootstrapButtons.fire({

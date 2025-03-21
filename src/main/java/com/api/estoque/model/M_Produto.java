@@ -10,7 +10,7 @@ public class M_Produto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String cod_barras;
+    private String codBarras;
     private String nome;
     private BigDecimal preco;
 
@@ -22,12 +22,12 @@ public class M_Produto {
         this.id = id;
     }
 
-    public String getCod_barras() {
-        return cod_barras;
+    public String getCodBarras() {
+        return codBarras;
     }
 
-    public void setCod_barras(String cod_barras) {
-        this.cod_barras = cod_barras;
+    public void setCodBarras(String codBarras) {
+        this.codBarras = codBarras;
     }
 
     public String getNome() {
